@@ -23,9 +23,16 @@ pkl_dir = './data/pkl'
 X_train_vec = load_pickle(f'{pkl_dir}/x_train_vec.pkl')
 y_train = load_pickle(f'{pkl_dir}/y_train.pkl')
 
-file_path = './data/video/mica-cam.mp4'
-video_cap = cv2.VideoCapture(file_path)
+input_path = './data/video/mica-cam.mp4'
+video_cap = cv2.VideoCapture(input_path)
+
+output_path = './data/video/mica-cam-output.mp4'
+out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'DIVX'), 15, (1920, 1080))
+idx = 1
+
 while(video_cap.isOpened()):
+    print(idx)
+    idx += 1
     ret, frame = video_cap.read()
     if not ret:
         break
@@ -62,10 +69,8 @@ while(video_cap.isOpened()):
                     2,
                     cv2.LINE_AA)
 
-    frame = cv2.resize(frame,
-                       (int(frame.shape[1]/1.5), int(frame.shape[0]/1.5)))
-    cv2.imshow('frame', frame)
-    cv2.waitKey()
+    out.write(frame)
 
 video_cap.release()
 cv2.destroyAllWindows()
+out.release()
