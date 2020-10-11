@@ -16,16 +16,16 @@ img_dir = './data/image'
 pkl_dir = './data/pkl'
 
 
-def load_images(img_dir):
-    face_imgs = []
-    labels = []
-    for label_dir in glob(f'{img_dir}/*'):
-        label = os.path.basename(label_dir)
-        for img_path in glob(f'{label_dir}/*'):
-            face_img = cv2.imread(img_path)
-            face_imgs.append(face_img)
-            labels.append(label)
-    return face_imgs, labels
+# def load_images(img_dir):
+#     face_imgs = []
+#     labels = []
+#     for label_dir in glob(f'{img_dir}/*'):
+#         label = os.path.basename(label_dir)
+#         for img_path in glob(f'{label_dir}/*'):
+#             face_img = cv2.imread(img_path)
+#             face_imgs.append(face_img)
+#             labels.append(label)
+#     return face_imgs, labels
 
 
 # face_imgs, labels = load_images(img_dir)
@@ -33,7 +33,9 @@ def load_images(img_dir):
 # save_pickle(labels, f'{pkl_dir}/labels.pkl')
 
 
-# region Embedding
+##################################################
+
+
 # face_imgs = load_pickle(f'{pkl_dir}/faces.pkl')
 # labels = load_pickle(f'{pkl_dir}/labels.pkl')
 
@@ -65,7 +67,9 @@ def load_images(img_dir):
 # pretrain_path = './weight/nn4.small2.v1.t7'
 # embed_faces = embedding_faces(pretrain_path, face_imgs)
 # save_pickle(embed_faces, f'{pkl_dir}/embed_blob_faces.pkl')
-# endregion
+
+
+##################################################
 
 
 face_imgs = load_pickle(f'{pkl_dir}/faces.pkl')
