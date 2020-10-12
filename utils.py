@@ -23,9 +23,13 @@ def preprocessing(face_imgs):
         face_imgs_resized.append(face_img_resized)
     return face_imgs_resized
 
-def most_similarity(embed_vecs, vec, labels):
+
+def most_similarity(embed_vecs, vec, labels, threshold=0.9):
     sim = cosine_similarity(embed_vecs, vec)
     sim = np.squeeze(sim, axis=1)
-    argmax = np.argsort(sim)[::-1][:1]
-    label = [labels[idx] for idx in argmax][0]
-    return label
+    argmax_idx = np.argsort(sim)[-1]
+    pred_proba = sim[argmax_idx]
+    if pred_proba < threshold:
+        return None, None
+    label = labels[argmax_idx]
+    return label, pred_proba

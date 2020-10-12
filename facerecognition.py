@@ -27,14 +27,17 @@ input_path = './data/video/mica-cam.mp4'
 video_cap = cv2.VideoCapture(input_path)
 
 output_path = './data/video/mica-cam-output.mp4'
-out = cv2.VideoWriter(output_path, cv2.VideoWriter_fourcc(*'DIVX'), 15, (1920, 1080))
+out = cv2.VideoWriter(output_path,
+                      cv2.VideoWriter_fourcc(*'DIVX'),
+                      15,
+                      (1920, 1080))
 idx = 1
 
 while(video_cap.isOpened()):
     print(idx)
     idx += 1
     ret, frame = video_cap.read()
-    if not ret:
+    if not ret or idx > 1600:
         break
     # Detect the faces
     detections = detector.detect(frame)
@@ -52,23 +55,27 @@ while(video_cap.isOpened()):
     vecs = recognitor.predict(face_imgs_resized)
     for vec in vecs:
         vec = vec.reshape(1, -1)
-        name = most_similarity(X_train_vec, vec, y_train)
+        name, pred_proba = most_similarity(X_train_vec, vec, y_train)
+        name = None if name is None else f'{name}: {round(pred_proba * 100, 2)}%'
         names.append(name)
 
     for detect, face_img, name in zip(detections, face_imgs, names):
-        x1, y1 = int(detect[0]), int(detect[1])
-        x2, y2 = int(detect[2]), int(detect[3])
+        if name is not None:
+            x1, y1 = int(detect[0]), int(detect[1])
+            x2, y2 = int(detect[2]), int(detect[3])
 
-        frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
-        cv2.putText(frame,
-                    name,
-                    (x1, y2+20),
-                    cv2.FONT_HERSHEY_SIMPLEX,
-                    1,
-                    (0, 255, 0),
-                    2,
-                    cv2.LINE_AA)
+            frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 1)
+            cv2.putText(frame,
+                        name,
+                        (x1, y2+20),
+                        cv2.FONT_HERSHEY_SIMPLEX,
+                        1,
+                        (0, 255, 0),
+                        1,
+                        cv2.LINE_AA)
 
+    # cv2.imshow('img', frame)
+    # cv2.waitKey()
     out.write(frame)
 
 video_cap.release()
