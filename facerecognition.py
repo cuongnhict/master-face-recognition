@@ -65,14 +65,14 @@ while(video_cap.isOpened()):
                 x1, y1 = int(detect[0]), int(detect[1])
                 x2, y2 = int(detect[2]), int(detect[3])
 
-                frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 1)
+                frame = cv2.rectangle(frame, (x1, y1), (x2, y2), (0, 255, 0), 2)
                 cv2.putText(frame,
                             name,
                             (x1, y2+20),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             1,
                             (0, 255, 0),
-                            1,
+                            2,
                             cv2.LINE_AA)
         out.write(frame)
 
