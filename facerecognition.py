@@ -1,6 +1,8 @@
 import numpy as np
 import cv2
 import os
+import time
+from datetime import datetime
 from glob import glob
 import face_detection
 
@@ -37,10 +39,17 @@ while(video_cap.isOpened()):
     print(idx)
     idx += 1
     ret, frame = video_cap.read()
-    if not ret or idx > 1600:
+    if not ret or idx > 100:
         break
     # Detect the faces
+    t0 = datetime.now()
+    print('t0 = ', t0)
     detections = detector.detect(frame)
+    t1 = datetime.now()
+    print('t1 = ', t1)
+
+    t0 = datetime.now()
+    print('t0 = ', t0)
     face_imgs = []
     for i, detect in enumerate(detections):
         x1, y1 = int(detect[0]), int(detect[1])
@@ -77,6 +86,8 @@ while(video_cap.isOpened()):
     # cv2.imshow('img', frame)
     # cv2.waitKey()
     out.write(frame)
+    t1 = datetime.now()
+    print('t1 = ', t1)
 
 video_cap.release()
 cv2.destroyAllWindows()

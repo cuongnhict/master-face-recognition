@@ -70,9 +70,13 @@ y_preds = []
 for vec in X_test_vec:
     vec = vec.reshape(1, -1)
     y_pred = most_similarity(X_train_vec, vec, y_train)
-    y_preds.append(y_pred)
+    y_preds.append(y_pred[0])
 
 if SAVE_TRAIN_VEC:
     save_pickle(X_train_vec, f'{pkl_dir}/x_train_vec.pkl')
     save_pickle(y_train, f'{pkl_dir}/y_train.pkl')
+
+print(len(y_preds))
+print(len(y_test))
+y_preds = list(map(lambda l: l if l is not None else 'unknown', y_preds))
 print(accuracy_score(y_preds, y_test))
